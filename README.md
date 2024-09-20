@@ -57,6 +57,11 @@ Here's an example of how the text file should be structured:
 
 Each block of text between blank lines represents a group, and the first line of each group is assigned to the **MAIN** layer, while subsequent lines are assigned to the **MARQUEE** layer.
 
+### Example Output
+
+![Marquee Example](./images/marquee-example.png)
+
+
 ### Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request with any improvements or bug fixes.
