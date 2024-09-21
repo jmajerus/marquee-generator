@@ -70,8 +70,8 @@ Scripts for both GIMP and Krita that allow you to dynamically generate and modif
     python
     Copy code
     ```
-    doc_path = "path_to_your_kra_document.kra"
-    text_file_path = "path_to_your_text_file.txt"
+    doc_path = "DALLdocument.kra"
+    text_file_path = "marquee.txt"
     ```
 2. Run the Script in Krita:
 
