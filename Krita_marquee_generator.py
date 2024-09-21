@@ -1,21 +1,27 @@
-from krita import Krita, Document, InfoObject
+import os
+from krita import Krita, InfoObject
 
-def load_document(file_path):
-    """ Load the Krita document. """
+def get_active_document():
+    """ Get the currently active Krita document. """
     app = Krita.instance()
-    document = app.openDocument(file_path)
+    document = app.activeDocument()
     if not document:
-        raise FileNotFoundError("The specified document could not be loaded.")
+        raise FileNotFoundError("No active document found. Please open a document in Krita first.")
     return document
 
 def update_text_layer(document, layer_name, text):
-    """ Update the specified text layer with new text, preserving line breaks. """
+    """ Update the text shape in the specified vector layer with new text, preserving line breaks. """
     layer = document.nodeByName(layer_name)
     if layer and layer.type() == 'vectorlayer':
-        # Ensure that line breaks within text are preserved
-        layer.setPlainText(text)
+        # Iterate over the shapes in the vector layer to find the TextShape
+        for shape in layer.shapes():
+            if shape.type() == 'TextShape':
+                shape.setText(text)  # Set the new text in the text shape
+                break
+        else:
+            raise ValueError(f"No text shape found in layer {layer_name}.")
     else:
-        raise ValueError(f"Layer {layer_name} not found or is not a text layer.")
+        raise ValueError(f"Layer {layer_name} not found or is not a vector layer.")
 
 def export_image(document, file_name):
     """ Export the document to a PNG file. """
@@ -28,15 +34,14 @@ def pause_script():
     """ Pause the script for manual editing. """
     input("Edit the image as needed in Krita, then press Enter to continue...")
 
-# Path to your Krita document and text file
-doc_path = "path_to_your_kra_document.kra"
-text_file_path = "path_to_your_text_file.txt"
+# Get the current directory where the script is located
+current_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Load the document
-document = load_document(doc_path)
+# Define the relative path to the text file
+text_file_path = os.path.join(current_dir, "marquee.txt")
 
-# Ensure the document stays open while the script runs
-document.setActive(True)
+# Get the active Krita document
+document = get_active_document()
 
 # Read the text file and process each block
 try:
